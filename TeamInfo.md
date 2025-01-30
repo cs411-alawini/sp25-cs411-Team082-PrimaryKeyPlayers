@@ -4,14 +4,14 @@
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-| TeamID      |        Team-000        |
-| TeamName    |         sample         |
-| Captain     |       Abdu Alawini     |
-| Captain     |  alawini@illinois.edu  |
-| Member1     |        Kevin Pei       |
-| Member1     |   kevin2@illinois.edu  |
-| Member2     |     Ti-Chung Cheng     |
-| Member2     |  tichung3@illinois.edu |
+| TeamID      |        Team-082        |
+| TeamName    |    PrimaryKeyPlayers   |
+| Captain     |     Benjamin Hesse     |
+| Captain     |  bhesse2@illinois.edu  |
+| Member1     |      Luca Listi        |
+| Member1     |   lucal2@illinois.edu  |
+| Member2     |                        |
+| Member2     |                        |
 | Member3     |                        |
 | Member3     |                        |
 
