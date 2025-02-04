@@ -6,14 +6,14 @@
 | ----------- | ---------------------- |
 | TeamID      |        Team-082        |
 | TeamName    |    PrimaryKeyPlayers   |
-| Captain     |     Benjamin Hesse     |
+| Captain     |      Benjamin Hesse    |
 | Captain     |  bhesse2@illinois.edu  |
 | Member1     |      Luca Listi        |
-| Member1     |   lucal2@illinois.edu  |
-| Member2     |                        |
-| Member2     |                        |
-| Member3     |                        |
-| Member3     |                        |
+| Member1     |  lucal2@illinois.edu   |
+| Member2     |      Yihan Gao         |
+| Member2     |  landing2@illinois.edu |
+| Member3     |      Tina Ding         |
+| Member3     |  yihang5@illinois.edu  |
 
 ## Project Information
 
