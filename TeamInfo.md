@@ -19,10 +19,14 @@
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-|  Title      |       ProjectTitle     |
+|  Title      |PrimaryKeyPlayer Predictions|
 | System URL  |      link_to_system    |
 | Video Link  |      link_to_video     |
 
 ## Project Summary
+Our project’s goal is to develop a web-based tool that provides historical analysis and predictive modeling for professional sports games. Using datasets from the NBA, our tool will allow users to analyze past game performances, compare player statistics, and forecast future outcomes. By integrating multiple data sources, including historical game records, real-time updates, and social media sentiment, the application will offer fans a comprehensive tool for analysis and predictions.
 
-This is a summary of the project!
+The platform will be valuable for sports analysts, fans, and sports bettors who want data-driven insights for upcoming professional sports games. Users will be able to view interactive charts, compare teams and players, and use AI-driven predictive models to estimate game results. 
+
+
+
