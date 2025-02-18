@@ -1,4 +1,4 @@
-# team000-sample
+# PrimaryKeyPlayers
 
 ## Basic Information
 
@@ -19,7 +19,7 @@
 
 |   Info      |        Description     |
 | ----------- | ---------------------- |
-|  Title      |PrimaryKeyPlayer Predictions|
+|  Title      |Primary Key Predictions |
 | System URL  |      link_to_system    |
 | Video Link  |      link_to_video     |
 
