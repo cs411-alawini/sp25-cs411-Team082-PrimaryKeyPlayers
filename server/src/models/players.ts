@@ -1,0 +1,35 @@
+export interface PlayerStats {
+    Rk: number;
+    Player: string;
+    Age: number;
+    Team: string;
+    Position: string;
+    Games: number;
+    GamesStarted: number;
+    MinutesPlayed: number;
+    FieldGoals: number;
+    FieldGoalsAttempted: number;
+    FieldGoalPercent: number;
+    ThreePoint: number;
+    ThreePointAttempted: number;
+    ThreePointPercent: number;
+    TwoPoint: number;
+    TwoPointAttempted: number;
+    TwoPointPercent: number;
+    EffectiveFieldGoalPercent: number;
+    FreeThrows: number;
+    FreeThrowsAttempted: number;
+    FreeThrowPercent: number;
+    OffensiveRebounds: number;
+    DefensiveRebounds: number;
+    TotalRebounds: number;
+    Assists: number;
+    Steals: number;
+    Blocks: number;
+    Turnovers: number;
+    PersonalFouls: number;
+    Points: number;
+    Awards: string;
+    PlayerAdditional: string;
+    Year: number;
+}
