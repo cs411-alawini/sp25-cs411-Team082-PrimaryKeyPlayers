@@ -31,14 +31,26 @@ function App() {
     toggleModal("addTeam", false);
     e.target.reset();
   };
-  const handleSearchPlayerSubmit = (e) => {
+  const handleSearchPlayerSubmit = async (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
       e.target.reportValidity();
       return;
     }
-    const playerName = e.target.searchPlayerName.value;
-    alert("Searching for player: " + playerName);
+    const searchName = e.target.searchPlayerName.value.trim();
+    try {
+      const res = await fetch(`/api/players?player_name=${encodeURIComponent(searchName)}`);
+      const data = await res.json();
+      if(!data || data.length === 0) {
+        alert('No player is found');
+      } else {
+        const p = Array.isArray(data) ? data[0]:data;
+        alert(`${p.Player}(${p.Team}) - PPG ${p.PTS}`);
+      }
+    } catch(err) {
+      console.error(err);
+      alert('Server Error: Please Check Your Console');
+    }
     toggleModal("searchPlayer", false);
     e.target.reset();
   };

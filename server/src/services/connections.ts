@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
-import * as dotenv from 'dotenv';
-
+import dotenv from 'dotenv';
 dotenv.config();
 
 if (!process.env.DB_HOST || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_NAME) {
