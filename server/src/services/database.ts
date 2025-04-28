@@ -87,8 +87,28 @@ export async function deleteUserById(user_id: number): Promise<void> {
   await pool.query(query, [user_id]);
 }
 
-
-
 export const removeFavorite = async (favorite_id: number) => {
   await pool.query('DELETE FROM favorites WHERE favorite_id = ?', [favorite_id]);
 };
+
+//newly added addfavoritewithlog to satisfy 1 transaction requirement 0427
+export async function addFavoriteWithLog(user_id:number,favorite_id: string,favorite_type:'player' | 'team'): Promise <void> {
+    const connection = await pool.getConnection();
+    try{
+      await connection.beginTransaction();
+      await connection.query(
+        ` INSERT INTO user_favorite(user_id, favorite_id, favorite_type) VALUES(?,?,?)`,
+        [user_id,favorite_id,favorite_type]
+      );
+      await connection.query(
+        ` INSERT INTO favorite_log(user_id, favorite_id, favorite_type, action) VALUES(?,?,?,?)`,
+        [user_id,favorite_id,favorite_type,'Added']
+      );
+      await connection.commit();
+    } catch(err){
+      await connection.rollback();
+      throw err;
+    } finally {
+      connection.release();
+    }
+}

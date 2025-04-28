@@ -1,8 +1,20 @@
 import {Router, Request, Response} from 'express';
 
-import {addFavorite, getFavoriteTeams, getFavoritePlayers, removeFavorite} from '../services/database';
+import {addFavoriteWithLog, addFavorite, getFavoriteTeams, getFavoritePlayers, removeFavorite} from '../services/database';
 
 const router = Router();
+
+// Post add favorite plus log transaction
+router.post('/', async (req: Request, res: Response) => {
+    const { user_id, favorite_id, favorite_type } = req.body;
+    try {
+        await addFavoriteWithLog (user_id, favorite_id, favorite_type);
+        res.status(201).json({message:'Favorite is added and logged!'});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error adding favorite', error });
+    }
+});
 
 // Route to add a new favorite
 router.post('/', async (req: Request, res: Response) => {
