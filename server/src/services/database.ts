@@ -89,3 +89,6 @@ export async function deleteUserById(user_id: number): Promise<void> {
 
 
 
+export const removeFavorite = async (favorite_id: number) => {
+  await pool.query('DELETE FROM favorites WHERE favorite_id = ?', [favorite_id]);
+};

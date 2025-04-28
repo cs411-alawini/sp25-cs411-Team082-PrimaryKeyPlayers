@@ -1,6 +1,6 @@
 import {Router, Request, Response} from 'express';
 
-import {addFavorite, getFavoriteTeams, getFavoritePlayers} from '../services/database';
+import {addFavorite, getFavoriteTeams, getFavoritePlayers, removeFavorite} from '../services/database';
 
 const router = Router();
 
@@ -33,6 +33,17 @@ router.get('/players/:user_id', async (req: Request, res: Response) => {
         res.json(players);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching favorite players', error });
+    }
+});
+
+// Remove a favorite
+router.delete('/:favorite_id', async (req: Request, res: Response) => {
+    const favorite_id = parseInt(req.params.favorite_id);
+    try {
+        await removeFavorite(favorite_id);
+        res.status(200).json({ message: 'Favorite removed successfully' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error removing favorite', error });
     }
 });
 
