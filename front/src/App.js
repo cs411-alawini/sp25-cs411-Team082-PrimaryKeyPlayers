@@ -7,6 +7,7 @@ function App() {
     removePlayer: false,
     removeTeam: false,
     searchTeam: false,
+    addFavorite:false, // add new modal here (04.27)
   });
   const toggleModal = (modalName, show = true) => {
     setModals((prev) => ({ ...prev, [modalName]: show }));
@@ -87,6 +88,20 @@ function App() {
     toggleModal("searchTeam", false);
     e.target.reset();
   };
+  // add new handleaddfavoritesubmit here (04.27)
+  const handleAddFavoriteSubmit = (e) => {
+    e.preventDefault();
+    if (!e.target.checkValidity()) {
+      e.target.reportValidity();
+      return;
+    }
+    const userId = e.target.userId.value;
+    const favoriteId = e.target.favoriteId.value;
+    const favoriteType = e.target.favoriteType.value;
+    alert(`Add Favorite:\nUserId:${userId}\nFavorite ID:${favoriteId}\nFavorite Type:${favoriteType}`);
+    toggleModal("addFavorite", false);
+    e.target.reset();
+  };
   return (
     <div className="bg-gray-100 text-gray-900">
       <div className="container mx-auto p-4">
@@ -96,6 +111,7 @@ function App() {
             Sign In
           </button>
         </header>
+        {/* 2. Section for Game Analysis and Player Compare */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           <div className="bg-white p-6 rounded shadow">
             <h2 className="text-2xl font-bold mb-4">Game Analysis</h2>
@@ -130,6 +146,7 @@ function App() {
           </div>
         </section>
         <section>
+          {/* 3. Manage Data Section  */}
           <h2 className="text-2xl font-bold mb-6">Manage Your Data</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div
@@ -179,10 +196,86 @@ function App() {
             >
               <h3 className="text-xl font-bold">Search Team</h3>
               <p className="mt-2">Find teams by name.</p>
+            </div>  
+            {/* Add "AddFavoriteBox" Button (04.27) */}
+            <div
+              id="addFavoriteBox"
+              onClick={() => toggleModal("addFavorite", true)}
+              className="bg-[#171719] text-white p-6 rounded shadow hover:shadow-lg cursor-pointer"
+            >
+              <h3 className="text-xl font-bold">Add Favorite</h3>
+              <p className="mt-2">Add yoru favorite player or team here.</p>
             </div>
           </div>
         </section>
       </div>
+      {/* Modals */}
+      {/* Add AddFavoriteBox Modal 04.27 */}
+      {modals.addFavorite && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white rounded shadow p-6 w-full max-w-md">
+          <h3 className="text-2xl font-bold mb-4">Add Favorite</h3>
+          <form onSubmit={handleAddFavoriteSubmit}>
+            <div className="mb-4">
+              <label className="block text-gray-700" htmlFor="userId">
+                User ID
+              </label>
+              <input
+                type="text"
+                id="userId"
+                name="userId"
+                className="w-full border rounded p-2"
+                placeholder="Enter User ID"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700" htmlFor="favoriteId">
+                Favorite ID
+              </label>
+              <input
+                type="text"
+                id="favoriteId"
+                name="favoriteId"
+                className="w-full border rounded p-2"
+                placeholder="Enter Team ID or Player Name"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700" htmlFor="favoriteType">
+                Favorite Type
+              </label>
+              <select
+                id="favoriteType"
+                name="favoriteType"
+                className="w-full border rounded p-2"
+                required
+              >
+                <option value = "">Select Type</option>
+                <option value = "team">Team</option>
+                <option value = "player">Player</option>
+                </select>
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={() => toggleModal("addFavorite", false)}
+                className="px-4 py-2 mr-4 border rounded hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-4 py-2 bg-[#171719] text-white rounded hover:bg-[#2a2a2a]"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      )}
       {modals.addPlayer && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white rounded shadow p-6 w-full max-w-md">
