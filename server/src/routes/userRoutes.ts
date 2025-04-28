@@ -1,5 +1,6 @@
 import {Router, Request, Response} from 'express';
 
+import { addUserWithProcedure} from '../services/database';
 import {addUser, getAllUsers, deleteUserById} from '../services/database';
 import {user} from '../models/user';
 
@@ -37,6 +38,15 @@ router.delete('/:user_id', async (req: Request, res: Response) => {
     }
 });
 
+//update user signup route
+router.post('/stored', async (req: Request, res: Response) => {
+    const {username, email,password} = req.body;
+    try {
+        await addUserWithProcedure(username,email,password);
+        res.status(200).json({ message: 'User succcessfully added using stored procedure' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting user', error });
+    }
+});
+
 export default router;
-
-

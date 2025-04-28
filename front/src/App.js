@@ -8,20 +8,52 @@ function App() {
     removeTeam: false,
     searchTeam: false,
     addFavorite:false, // add new modal here (04.27)
+    viewFavorites:false,
+    viewFavoriteResult:false,
   });
+
+  const[favoritesList, setFavoritesList] = useState([]);
   const toggleModal = (modalName, show = true) => {
     setModals((prev) => ({ ...prev, [modalName]: show }));
   };
-  const handleAddPlayerSubmit = (e) => {
+
+  const handleAddPlayerSubmit = async (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
       e.target.reportValidity();
       return;
     }
-    alert("Player added successfully!");
-    toggleModal("addPlayer", false);
+    const playerName = e.target.playerName.value;
+    const playerPosition = e.target.playerPosition.value;
+    const teamId = e.target.teamId.value;
+    try {
+      const res = await fetch('http://localhost:4000/api/players', {
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          player_name: playerName,
+          position:playerPosition,
+          team_id: parseInt(teamId),
+        }),
+      });
+      if(!res.ok) {
+        const data_Error = await res.json();
+        throw new Error(data_Error.message || 'Failed to add player');
+      }
+      const data= await res.json()
+      alert('Player successfully added!')
+    } catch(error) {
+      console.error(error);
+      alert('Failed to add player: ' + error.message);
+    }
+    toggleModal('addPlayer', false);
     e.target.reset();
   };
+
+
   const handleAddTeamSubmit = (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
@@ -66,16 +98,28 @@ function App() {
     toggleModal("removePlayer", false);
     e.target.reset();
   };
-  const handleRemoveTeamSubmit = (e) => {
+  const handleRemoveTeamSubmit = async (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
       e.target.reportValidity();
       return;
     }
-    const teamId = e.target.removeTeamId.value;
-    alert("Removing team with ID: " + teamId);
-    toggleModal("removeTeam", false);
-    e.target.reset();
+    const playerId = e.target.removePlayerId.value;
+    try {
+      const res = await fetch(`http://localhost:4000/api/favorites/players/${playerId}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      if(!res.ok) {
+        throw new Error('Failed to fetch favorites');
+    } 
+    alert('Player succcessfully deleted');
+    }catch(error) {
+      console.error(error);
+      alert('Error deleting player: ' + error.message);
+    }
+    toggleModal("removePlayer", false);
+    e.target.rest();
   };
   const handleSearchTeamSubmit = (e) => {
     e.preventDefault();
@@ -88,8 +132,26 @@ function App() {
     toggleModal("searchTeam", false);
     e.target.reset();
   };
+  // add handleviewffavoritesubmit here 
+  const handleViewFavoritesSubmit = async (e) => {
+    e.preventDefault();
+    const userId = e.target.viewUserId.value;
+    try {
+      const res = await fetch(`http://localhost:4000/api/favorites/players/${userId}`);
+      if(!res.ok) {
+        throw new Error('Failed to fetch favorites');
+    } 
+    const data = await res.json();
+    setFavoritesList(data);
+    toggleModal('viewFavorites',false);
+    toggleModal('viewFavoriteResult', true);
+    }catch(error) {
+      console.error(error);
+      alert('Error fetching favorites');
+    }
+  };
   // add new handleaddfavoritesubmit here (04.27)
-  const handleAddFavoriteSubmit = (e) => {
+  const handleAddFavoriteSubmit = async (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
       e.target.reportValidity();
@@ -98,13 +160,37 @@ function App() {
     const userId = e.target.userId.value;
     const favoriteId = e.target.favoriteId.value;
     const favoriteType = e.target.favoriteType.value;
-    alert(`Add Favorite:\nUserId:${userId}\nFavorite ID:${favoriteId}\nFavorite Type:${favoriteType}`);
-    toggleModal("addFavorite", false);
+    try {
+      const res = await fetch('http://localhost:4000/api/favorites', {
+        method:'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          user_id:parseInt(userId),
+          favorite_id:favoriteId,
+          favorite_type:favoriteType,
+        }),
+      });
+      if(!res.ok) {
+        const data_Error = await res.json();
+        throw new Error(data_Error.message || 'Failed to add favorite');
+      }
+      const data= await res.json()
+      alert('Favorite successfully added!')
+    } catch(error) {
+      console.error(error);
+      alert('Failed to add favorite: ' + error.message);
+    }
+    toggleModal('addFavorite', false);
     e.target.reset();
   };
+
   return (
     <div className="bg-gray-100 text-gray-900">
       <div className="container mx-auto p-4">
+
         <header className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold">Primary Key Predictions</h1>
           <button className="bg-[#171719] text-white px-4 py-2 rounded hover:bg-[#2a2a2a]">
@@ -204,8 +290,18 @@ function App() {
               className="bg-[#171719] text-white p-6 rounded shadow hover:shadow-lg cursor-pointer"
             >
               <h3 className="text-xl font-bold">Add Favorite</h3>
-              <p className="mt-2">Add yoru favorite player or team here.</p>
+              <p className="mt-2">Add your favorite player or team here.</p>
             </div>
+             {/* Add "viewFavoritebox" Button (04.28) */}
+            <div
+              id="viewFavoritesBox"
+              onClick={() => toggleModal("viewFavorites", true)}
+              className="bg-[#171719] text-white p-6 rounded shadow hover:shadow-lg cursor-pointer"
+            >
+              <h3 className="text-xl font-bold">View My Favorites</h3>
+              <p className="mt-2">View your favorite player or team here.</p>
+            </div>
+
           </div>
         </section>
       </div>
@@ -553,6 +649,71 @@ function App() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* add viewfavoritemodal here 4.28 */}
+      {modals.viewFavorites && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded shadow p-6 w-full max-w-md">
+            <h3 className="text-2xl font-bold mb-4">View My Favorites</h3>
+            <form onSubmit={handleViewFavoritesSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700" htmlFor="viewUserId">
+                  Enter Your User ID:
+                </label>
+                <input
+                  type="text"
+                  id="viewUserId"
+                  name="viewUserId"
+                  className="w-full border rounded p-2"
+                  required
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={() => toggleModal("viewFavorites", false)}
+                  className="px-4 py-2 mr-4 border rounded hover:bg-gray-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-[#171719] text-white rounded hover:bg-[#2a2a2a]"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+            </div>
+          </div>
+      )}
+      {modals.viewFavoriteResult && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded shadow p-6 w-full max-w-md">
+            <h3 className="text-2xl font-bold mb-4">Your Current Favorites</h3>
+            <div>
+            {favoritesList.length > 0? (
+                <div className="grid grid-cols-1 gap-4">
+                  {favoritesList.map((fav,index)=> (
+                    <div key={index} className="bg-gray-100 p-4 rounded shadow">
+                      <p className="text-lg font-semibold">{fav.favorite_id}</p>
+                      <p className="text-sm text-gray-600 capitalize">{fav.favorite_type}</p>
+                    </div>
+                  ))}
+                </div>
+              ):(
+                <p>No favorites to display.</p>
+              )}
+              </div>
+              <div className ="flex justify-end mt-4">
+                 <button onClick={()=>toggleModal('viewFavoriteResult', false)}
+                 className="px-4 py-2 bg-[#171719] text-white rounded hover:bg-[#2a2a2a]"
+                 >
+                  Close
+                 </button>
+              </div>
           </div>
         </div>
       )}

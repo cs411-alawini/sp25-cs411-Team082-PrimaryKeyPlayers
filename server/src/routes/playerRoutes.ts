@@ -1,6 +1,6 @@
 import {Router, Request, Response} from 'express';
 
-import {getPlayerByName, getAllPlayers} from '../services/database';
+import {deletePlayer, addPlayer, getPlayerByName, getAllPlayers} from '../services/database';
 
 const router = Router();
 
@@ -13,6 +13,27 @@ router.get('/', async (req: Request, res: Response) => {
     } else {
         const players = await getAllPlayers();
         res.json(players);
+    }
+});
+
+router.post('/', async (req: Request, res: Response) => {
+    const {player_name, position, team_id} = req.body;
+    try {
+        const result = await addPlayer(player_name, position, team_id);
+        res.status(201).json({ message: 'User succcessfully added Player' , result});
+    } catch (error) {
+        res.status(500).json({ message: 'Error adding player' });
+    }
+});
+
+
+router.delete('//:player_id', async (req: Request, res: Response) => {
+    const playerId = parseInt(req.params.player_id);
+    try {
+        await deletePlayer(playerId);
+        res.status(200).json({ message: 'User succcessfully deleted Player' });
+    } catch (error) {
+        res.status(500).json({ message: 'Error deleting player', error });
     }
 });
 

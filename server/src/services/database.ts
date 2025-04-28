@@ -82,6 +82,11 @@ export async function getFavoritePlayers(user_id: number): Promise<PlayerStats[]
   return rows as PlayerStats[];
 }
 
+export async function deletePlayer(player_id: number): Promise<void> {
+  const query = 'DELETE FROM players WHERE Rk=?';
+  await pool.query(query,[player_id]);
+}
+
 export async function deleteUserById(user_id: number): Promise<void> {
   const query = 'DELETE FROM user WHERE user_id = ?';
   await pool.query(query, [user_id]);
@@ -112,3 +117,16 @@ export async function addFavoriteWithLog(user_id:number,favorite_id: string,favo
       connection.release();
     }
 }
+// Update backend call stored procedure for add user (4.28)
+export async function addUserWithProcedure(username: string, email:string, password:string): Promise<void> {
+  const query = 'CALL sp_addUser(?,?,?)';
+  await pool.query(query,[username,email,password]);
+}
+export async function addPlayer(player_name: string, position:string, team_id:string) {
+  const[result] = await pool.query(
+    'INSERT INTO player (player_name, position, team_id) VALUES(?,?,?)',
+    [player_name, position, team_id]
+  );
+  return result;
+}
+
