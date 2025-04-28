@@ -83,7 +83,7 @@ export async function getFavoritePlayers(user_id: number): Promise<PlayerStats[]
 }
 
 export async function deletePlayer(player_id: number): Promise<void> {
-  const query = 'DELETE FROM players WHERE Rk=?';
+  const query = 'DELETE FROM player WHERE player_id=?';
   await pool.query(query,[player_id]);
 }
 

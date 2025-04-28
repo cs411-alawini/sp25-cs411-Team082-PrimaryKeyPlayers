@@ -87,17 +87,33 @@ function App() {
     toggleModal("searchPlayer", false);
     e.target.reset();
   };
-  const handleRemovePlayerSubmit = (e) => {
+
+  const handleRemovePlayerSubmit = async (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {
       e.target.reportValidity();
       return;
     }
-    const playerId = e.target.removePlayerId.value;
-    alert("Removing player with ID: " + playerId);
-    toggleModal("removePlayer", false);
+    const playerId = e.target.elements.removePlayerId.value;
+    try {
+      const res = await fetch(`http://localhost:4000/api/players/${playerId}`, {
+        method:'DELETE',
+        credentials:'include',
+    });
+      if(!res.ok) {
+        throw new Error('Failed to remove player');
+      }
+      alert('Player successfully removed!')
+    } catch(error) {
+      console.error(error);
+      alert('Failed to remove player: ' + error.message);
+    }
+    toggleModal('removePlayer', false);
     e.target.reset();
   };
+
+
+
   const handleRemoveTeamSubmit = async (e) => {
     e.preventDefault();
     if (!e.target.checkValidity()) {

@@ -27,7 +27,7 @@ router.post('/', async (req: Request, res: Response) => {
 });
 
 
-router.delete('//:player_id', async (req: Request, res: Response) => {
+router.delete('/:player_id', async (req: Request, res: Response) => {
     const playerId = parseInt(req.params.player_id);
     try {
         await deletePlayer(playerId);
