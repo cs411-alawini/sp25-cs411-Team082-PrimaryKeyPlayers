@@ -11,7 +11,13 @@ import { userData } from '../../../data/userData';
 import { userFavoritesData } from '../../../data/userFavoritesData';
 
 export async function getAllPlayers(): Promise<PlayerStats[]> {
-  const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM players ORDER BY Rk ASC');
+  const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM players ORDER BY G ASC');
+  return rows as PlayerStats[];
+}
+
+export async function getPlayerByTeam(team_id: string): Promise<PlayerStats[]> {
+  const query = 'SELECT * FROM players WHERE LOWER(team_id) = ?';
+  const [rows] = await pool.query<RowDataPacket[]>(query, [team_id.toLowerCase()]);
   return rows as PlayerStats[];
 }
 

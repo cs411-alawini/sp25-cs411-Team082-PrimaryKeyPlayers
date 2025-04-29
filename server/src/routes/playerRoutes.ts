@@ -1,6 +1,7 @@
 import {Router, Request, Response} from 'express';
 
 import {deletePlayer, addPlayer, getPlayerByName, getAllPlayers} from '../services/database';
+import pool from '../services/connections';
 
 const router = Router();
 
@@ -15,6 +16,13 @@ router.get('/', async (req: Request, res: Response) => {
         res.json(players);
     }
 });
+
+router.get('/by-team/:team_id', async (req: Request, res: Response) => {
+    const { team_id } = req.params;
+    const [rows] = await pool.query('SELECT * FROM players WHERE team = ?', [team_id]);
+    res.json(rows);
+  });
+  
 
 router.post('/', async (req: Request, res: Response) => {
     const {player_name, position, team_id} = req.body;

@@ -21,5 +21,6 @@ app.use('/api/teams', teamRoutes);
 app.use('/api/favorites',favoriteRoutes);
 app.use('/api/users',userRoutes);
 app.get('/api/health', (_req: Request, res:Response) => {res.json({status:'ok'})});
+app.use('/api/auth', authroutes);
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`API is listening on ${PORT}`));
